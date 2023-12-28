@@ -1,0 +1,60 @@
+- name: Install & Configure Dev-Environment
+  hosts: localhost
+  vars:
+    antidote_plugins: |
+      zsh-users/zsh-autosuggestions
+      zdharma-continuum/fast-syntax-highlighting kind:defer
+    zsh_theme: ZSH_THEME="robbyrussell"
+    omz_path: source $HOME/.oh-my-zsh/oh-my-zsh.sh
+    antidote_path: |
+      source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
+      antidote load
+    nvm_path: |
+      export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  tasks:
+    - community.general.homebrew:
+       name:
+         - antidote
+         - tmux
+         - gh
+         - fzf
+         - ripgrep
+         - neovim
+         - ghcup
+         - go
+       state: latest
+    - community.general.homebrew_cask:
+       name:
+         - flutter
+         - vscodium
+       state: latest
+    - name: Installing nvm
+      ansible.builtin.shell: >
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    - name: Installing oh-my-zsh
+      ansible.builtin.shell: >
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+      args:
+        creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    - name: Creating .zsh_plugins
+      copy:
+        dest: "{{ ansible_env.HOME}}/.zsh_plugins.txt"
+        content: "{{ antidote_plugins }}"
+    - name: Creating .zshrc & exporting PATHS
+      copy:
+        dest: "{{ ansible_env.HOME}}/.zshrc"
+        content: |
+          {{ zsh_theme }}
+
+          {{ nvm_path }}
+
+          {{ omz_path }}
+
+          {{ antidote_path }}
+    - name: Installing fzf keybindings & completions
+      ansible.builtin.shell: >
+        sh -c "$HOMEBREW_PREFIX/opt/fzf/install" "" --all

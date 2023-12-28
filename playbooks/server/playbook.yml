@@ -1,0 +1,70 @@
+- name: Configure servers for deployement
+  hosts: server_nodes
+  become: yes
+  vars:
+    antidote_plugins: |
+      zsh-users/zsh-autosuggestions
+      zdharma-continuum/fast-syntax-highlighting kind:defer
+    zsh_theme: ZSH_THEME="robbyrussell"
+    omz_path: source $HOME/.oh-my-zsh/oh-my-zsh.sh
+    antidote_path: |
+      source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
+      antidote load
+  tasks:
+    - name: Configure Lid behaviour on battery
+      ansible.builtin.replace:
+        path: /etc/systemd/logind.conf
+        regexp: '#HandleLidSwitch=suspend'
+        replace: 'HandleLidSwitch=ignore'
+    - name: Configure Lid behaviour on external power
+      ansible.builtin.replace:
+        path: /etc/systemd/logind.conf
+        regexp: '#HandleLidSwitchExternalPower=suspend'
+        replace: 'HandleLidSwitchExternalPower=ignore'
+    - name: Configure dnf package to opt for fastest mirror
+      ansible.builtin.lineinfile:
+        path: /etc/dnf/dnf.conf
+        insertafter: 'skip_if_unavailable=True'
+        line: fastestmirror=True
+    - name: Configure dnf package to parallel download
+      ansible.builtin.lineinfile:
+        path: /etc/dnf/dnf.conf
+        insertafter: 'fastestmirror=True'
+        line: max_parallel_downloads=10
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+    - name: Installing tooling & additional packages
+      ansible.builtin.dnf:
+        name:
+          - zsh
+          - git
+          - tmux
+        state: latest
+    - name: Cloning antidote
+      ansible.builtin.git:
+        repo: 'https://github.com/mattmc3/antidote.git'
+        depth: 1
+        dest: ${ZDOTDIR:-$HOME}/.antidote
+    - name: Installing oh-my-zsh
+      ansible.builtin.shell: >
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+      args:
+        creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+    - name: Creating .zsh_plugins
+      copy:
+        dest: "{{ ansible_env.HOME}}/.zsh_plugins.txt"
+        content: "{{ antidote_plugins }}"
+    - name: Creating .zshrc & exporting PATHS
+      copy:
+        dest: "{{ ansible_env.HOME}}/.zshrc"
+        content: |
+          {{ zsh_theme }}
+
+          {{ omz_path }}
+
+          {{ antidote_path }}
+    - name: Changing default shell to zsh
+      ansible.builtin.shell: >
+        sh -c "chsh -s $(which zsh)"
