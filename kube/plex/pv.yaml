@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-data-storage
+  namespace: media-center
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 1Ti
+  accessModes:
+    - ReadOnlyMany
+  nfs:
+    path: /mnt/storage/toshiba
+    server: 192.168.1.201
+    readOnly: true

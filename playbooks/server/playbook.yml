@@ -1,6 +1,6 @@
 - name: Configure servers for deployement
   hosts: server_nodes
-  become: yes
+  become: true
   vars:
     antidote_plugins: |
       zsh-users/zsh-autosuggestions
@@ -8,7 +8,10 @@
     zsh_theme: ZSH_THEME="robbyrussell"
     omz_path: source $HOME/.oh-my-zsh/oh-my-zsh.sh
     antidote_path: |
-      source $HOMEBREW_PREFIX/opt/antidote/share/antidote/antidote.zsh
+      # source antidote
+      source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+      
+      # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
       antidote load
   tasks:
     - name: Configure Lid behaviour on battery
@@ -35,7 +38,7 @@
       ansible.builtin.dnf:
         name: "*"
         state: latest
-    - name: Installing tooling & additional packages
+    - name: Install tools & additional packages
       ansible.builtin.dnf:
         name:
           - zsh
@@ -43,22 +46,26 @@
           - tmux
         state: latest
     - name: Cloning antidote
+      become_user: konrad
       ansible.builtin.git:
         repo: 'https://github.com/mattmc3/antidote.git'
         depth: 1
-        dest: ${ZDOTDIR:-$HOME}/.antidote
+        dest: "~/.antidote"
     - name: Installing oh-my-zsh
+      become_user: konrad
       ansible.builtin.shell: >
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
       args:
-        creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+        creates: "~/.oh-my-zsh"
     - name: Creating .zsh_plugins
+      become_user: konrad
       copy:
-        dest: "{{ ansible_env.HOME}}/.zsh_plugins.txt"
+        dest: "~/.zsh_plugins.txt"
         content: "{{ antidote_plugins }}"
     - name: Creating .zshrc & exporting PATHS
+      become_user: konrad
       copy:
-        dest: "{{ ansible_env.HOME}}/.zshrc"
+        dest: "~/.zshrc"
         content: |
           {{ zsh_theme }}
 
@@ -66,5 +73,6 @@
 
           {{ antidote_path }}
     - name: Changing default shell to zsh
-      ansible.builtin.shell: >
-        sh -c "chsh -s $(which zsh)"
+      become: true
+      ansible.builtin.command: usermod --shell /bin/zsh konrad
+      changed_when: false

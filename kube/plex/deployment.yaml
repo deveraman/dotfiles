@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: plex-server               # < label for tagging and reference
+  name: plex-server                # < name of the deployment
+  namespace: media-center           # < namespace where to place the deployment and pods               # < namespace where place the deployment and podsj
+spec:
+  replicas: 1                     # < number of pods to deploy
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: plex-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 0                 # < The number of pods that can be created above the desired amount of pods during an update
+      maxUnavailable: 1           # < The number of pods that can be unavailable during the update process
+    type: RollingUpdate           # < New pods are added gradually, and old pods are terminated gradually
+  template:
+    metadata:
+      labels:
+        app: plex-server
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: master
+      volumes:
+      - name: plex-config     # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: pms-config # < pvc name we created in the previous yaml
+      - name: nfs-storage0
+        persistentVolumeClaim:
+          claimName: nfs-data0
+      containers:
+      - env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
+        - name: PLEX_CLAIM
+          value: claim-n-vdvnuNDe9W9zsKa7FK
+        - name: ADVERTISE_IP
+          value: http://192.168.1.211:32400    # 
+        - name: TZ
+          value: Asia/Calcutta  # < Timezone
+        image: plexinc/pms-docker   # < the name of the docker image we will use
+        imagePullPolicy: Always    # < always use the latest image when creating container/pod
+        name: plex-server           # < name of container
+        ports:
+        - containerPort: 32400     # < required network portnumber.
+          name: pms-web            # < reference name from the port in the service yaml
+          protocol: TCP
+        - containerPort: 32469
+          name: dlna-tcp
+          protocol: TCP
+        - containerPort: 1900
+          name: dlna-udp
+          protocol: UDP
+        - containerPort: 3005
+          name: plex-companion
+          protocol: TCP  
+        - containerPort: 5353
+          name: discovery-udp
+          protocol: UDP  
+        - containerPort: 8324
+          name: plex-roku
+          protocol: TCP  
+        - containerPort: 32410
+          name: gdm-32410
+          protocol: UDP
+        - containerPort: 32412
+          name: gdm-32412
+          protocol: UDP
+        - containerPort: 32413
+          name: gdm-32413
+          protocol: UDP
+        - containerPort: 32414
+          name: gdm-32414
+          protocol: UDP
+        resources: {}
+        stdin: true
+        tty: true
+        volumeMounts:            # < the volume mount in the container. Look at the relation volumelabel->pvc->pv
+        - mountPath: /config     # < mount location in the container
+          name: plex-config  # < volumelabel configured earlier in the yaml file
+        - mountPath: /data/storage0
+          name: nfs-storage0 
+      restartPolicy: Always
