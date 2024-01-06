@@ -1,27 +1,26 @@
-kind: PersistentVolumeClaim
+## media.persistentvolumeclaim.yml
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: pms-config
-  namespace: media-center
+  namespace: "media-center"
+  name: "pms-config-claim"
 spec:
-  storageClassName: longhorn
+  storageClassName: "manual"
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: "10Gi"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nfs-data0
-  namespace: media-center
+  namespace: "media-center"
+  name: "media-data"
 spec:
-  storageClassName: ""
-  volumeName: nfs-data-storage
+  storageClassName: "manual"
   accessModes:
-    - ReadOnlyMany
-  volumeMode: Filesystem
+    - ReadWriteMany
   resources:
     requests:
-      storage: 1Ti
+      storage: "1Ti"

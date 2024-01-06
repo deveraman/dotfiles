@@ -21,19 +21,17 @@ spec:
       labels:
         app: plex-server
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: master
       volumes:
-      - name: plex-config     # < linkname of the volume for the pvc
+      - name: config # < linkname of the volume for the pvc
         persistentVolumeClaim:
-          claimName: pms-config # < pvc name we created in the previous yaml
-      - name: nfs-storage0
+          claimName: pms-config-claim # < pvc name we created in the previous yaml
+      - name: data0 # < linkname of the volume for the pvc
         persistentVolumeClaim:
-          claimName: nfs-data0
+          claimName: media-data # < pvc name we created in the previous yaml
       containers:
       - env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
-          value: claim-n-vdvnuNDe9W9zsKa7FK
+          value: claim-7xqr5ZAMjqWcdBsx2RxH
         - name: ADVERTISE_IP
           value: http://192.168.1.211:32400    # 
         - name: TZ
@@ -77,7 +75,7 @@ spec:
         tty: true
         volumeMounts:            # < the volume mount in the container. Look at the relation volumelabel->pvc->pv
         - mountPath: /config     # < mount location in the container
-          name: plex-config  # < volumelabel configured earlier in the yaml file
-        - mountPath: /data/storage0
-          name: nfs-storage0 
+          name: config  # < volumelabel configured earlier in the yaml file
+        - mountPath: /data/storage0     # < mount location in the container
+          name: data0 # < volumelabel configured earlier in the yaml file
       restartPolicy: Always
