@@ -6,14 +6,13 @@ metadata:
   name: plex-server                # < name of the deployment
   namespace: media-center           # < namespace where to place the deployment and pods               # < namespace where place the deployment and podsj
 spec:
-  replicas: 1                     # < number of pods to deploy
-  revisionHistoryLimit: 0
+  replicas: 2                     # < number of pods to deploy
   selector:
     matchLabels:
       app: plex-server
   strategy:
     rollingUpdate:
-      maxSurge: 0                 # < The number of pods that can be created above the desired amount of pods during an update
+      maxSurge: 1                 # < The number of pods that can be created above the desired amount of pods during an update
       maxUnavailable: 1           # < The number of pods that can be unavailable during the update process
     type: RollingUpdate           # < New pods are added gradually, and old pods are terminated gradually
   template:
