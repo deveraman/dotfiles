@@ -24,3 +24,16 @@ spec:
   resources:
     requests:
       storage: "1Ti"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: "media-center"
+  name: "media-data1"
+spec:
+  storageClassName: "manual"
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "500Gi"

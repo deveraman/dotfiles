@@ -27,3 +27,18 @@ spec:
     - ReadWriteMany
   hostPath:
     path: "/mnt/storage/toshiba2"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: "media-data1"
+  labels:
+    type: "local"
+spec:
+  storageClassName: "manual"
+  capacity:
+    storage: "500Gi"
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/storage/toshiba"

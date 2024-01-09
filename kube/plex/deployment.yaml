@@ -21,6 +21,8 @@ spec:
       labels:
         app: plex-server
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: master
       volumes:
       - name: config # < linkname of the volume for the pvc
         persistentVolumeClaim:
@@ -28,6 +30,9 @@ spec:
       - name: data0 # < linkname of the volume for the pvc
         persistentVolumeClaim:
           claimName: media-data # < pvc name we created in the previous yaml
+      - name: data1 # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: media-data1 # < pvc name we created in the previous yaml
       containers:
       - env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
@@ -78,4 +83,6 @@ spec:
           name: config  # < volumelabel configured earlier in the yaml file
         - mountPath: /data/storage0     # < mount location in the container
           name: data0 # < volumelabel configured earlier in the yaml file
+        - mountPath: /data/storage1     # < mount location in the container
+          name: data1 # < volumelabel configured earlier in the yaml file
       restartPolicy: Always

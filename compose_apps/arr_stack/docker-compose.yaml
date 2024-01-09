@@ -1,0 +1,89 @@
+version: "3.9"
+
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: ghcr.io/hotio/qbittorrent
+    ports:
+      - "8080:8080"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Asia/Calcutta
+    volumes:
+      - qbittorrent_config:/config
+      - /mnt/storage/toshiba/movies/:/movies
+      - /mnt/storage/toshiba/tv:/tv
+      - /mnt/storage/toshiba/anime/:/anime
+      - /mnt/storage/toshiba2/movies/:/movies2
+      - /mnt/storage/toshiba2/tv:/tv2
+      - /mnt/storage/toshiba2/anime/:/anime2
+    networks:
+        - transfer-net
+    restart: unless-stopped
+
+  radarr:
+    container_name: radarr
+    image: ghcr.io/hotio/radarr
+    ports:
+      - "8081:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Asia/Calcutta
+    volumes:
+      - radarr_config:/config
+      - /mnt/storage/toshiba/movies:/movies
+      - /mnt/storage/toshiba2/movies:/movies2
+    networks:
+      - transfer-net
+    restart: unless-stopped
+
+  sonarr:
+    container_name: sonarr
+    image: ghcr.io/hotio/sonarr
+    ports:
+      - "8082:8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Asia/Calcutta
+    volumes:
+      - sonarr_config:/config
+      - /mnt/storage/toshiba2/anime:/anime2
+      - /mnt/storage/toshiba2/tv:/tv2
+      - /mnt/storage/toshiba/anime:/anime
+      - /mnt/storage/toshiba/tv:/tv
+    networks:
+      - transfer-net
+    restart: unless-stopped
+
+  jackett:
+    container_name: jackett
+    image: ghcr.io/hotio/jackett
+    ports:
+      - "8083:9117"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=002
+      - TZ=Asia/Calcutta
+    volumes:
+      - jackett_config:/config
+    networks:
+      - transfer-net
+    restart: unless-stopped
+
+volumes:
+  qbittorrent_config:
+  radarr_config:
+  sonarr_config:
+  jackett_config:
+
+networks:
+  transfer-net:
+    name: transfer-net
+    driver: bridge

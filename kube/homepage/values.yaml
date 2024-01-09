@@ -1,0 +1,83 @@
+config:
+  theme: dark
+
+  background: 
+    image: https://images4.alphacoders.com/202/202536.jpg
+    blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+    saturate: 50 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+    brightness: 50 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+    opacity: 50 # 0-100
+
+  services:
+    - Media:
+        - Plex:
+          href: http://192.168.1.211:32400/
+          target: _self
+          description: Plex
+          namespace: media-center
+          app: plex-server
+
+    - Cluster Management:
+        - Portainer:
+          href: https://192.168.1.208:9443/
+          target: _self
+          description: Cluster & Docker management
+          namespace: portainer
+          app: portainer
+
+        - Longhorn:
+          href: http://192.168.1.207/
+          target: _self
+          description: HA Storage for Cluster
+          namespace: longhorn-system
+          app: longhorn-ui
+
+        - Uptime Kuma:
+          href: http://192.168.1.212/
+          target: _self
+          description: Kuma kuma kuma
+          namespace: uptime-kuma
+          app: uptime-kuma
+
+    - Network:
+        - Traefik:
+          href: http://192.168.1.206:9000/dashboard/
+          target: _self
+          description: Reverse Proxy & Ingress
+          namespace: kube-system
+          app: traefik
+
+        - Pihole:
+          href: http://192.168.1.210/
+          target: _self
+          description: Network wide adguard + Unbound dns resolver
+          namespace: pihole-system
+          app: pihole
+  widgets:
+    # show the kubernetes widget, with the cluster summary and individual nodes
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - search:
+        provider: duckduckgo
+        target: _blank
+  kubernetes:
+    mode: cluster
+  settings:
+
+# The service account is necessary to allow discovery of other services
+serviceAccount:
+  create: true
+  name: homepage
+
+# This enables the service account to access the necessary resources
+enableRbac: true
