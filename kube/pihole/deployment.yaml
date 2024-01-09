@@ -10,12 +10,7 @@ spec:
   selector:
     matchLabels:
       app: pihole
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 50%
-    type: RollingUpdate
+  replicas: 2
   template:
     metadata:
       labels:
