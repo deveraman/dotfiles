@@ -3,14 +3,12 @@ local util = require('util')
 
 local ensure_installed = {
     'gopls',
-    'hls',
     'tsserver',
 }
 
 local servers = {
     'dartls',
     'gopls',
-    'hls',
     'tsserver',
 }
 
