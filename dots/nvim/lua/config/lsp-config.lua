@@ -3,12 +3,20 @@ local util = require('util')
 
 local ensure_installed = {
     'gopls',
+    'pyright',
+    'ruff_lsp',
+    'rust_analyzer',
+    'svelte',
     'tsserver',
 }
 
 local servers = {
     'dartls',
     'gopls',
+    'pyright',
+    'ruff_lsp',
+    'rust_analyzer',
+    'svelte',
     'tsserver',
 }
 
