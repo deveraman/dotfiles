@@ -40,16 +40,20 @@ spec:
           path: /mnt/storage/wd_240gb
           readOnly: true
       containers:
-      - env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
+      - name: plex-server           # < name of container
+        image: plexinc/pms-docker   # < the name of the docker image we will use
+        imagePullPolicy: Always    # < always use the latest image when creating container/pod
+        resources:
+          requests:
+            limits:
+              memory: "1024Mi"
+        env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
           value: claim-n8RuYcRGiXTj81j8vMYZ
         - name: ADVERTISE_IP
           value: http://192.168.1.211:32400    # 
         - name: TZ
           value: Asia/Calcutta  # < Timezone
-        image: plexinc/pms-docker   # < the name of the docker image we will use
-        imagePullPolicy: Always    # < always use the latest image when creating container/pod
-        name: plex-server           # < name of container
         ports:
         - containerPort: 32400     # < required network portnumber.
           name: pms-web            # < reference name from the port in the service yaml
