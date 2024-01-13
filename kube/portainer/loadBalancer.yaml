@@ -10,14 +10,5 @@ spec:
   selector:
     app.kubernetes.io/name: portainer
   type: LoadBalancer
-  ports:
-  - name: http
-    protocol: TCP
-    port: 8000
-    targetPort: 8000
-  - name: app
-    protocol: TCP
-    port: 9443
-    targetPort: 9443
 ---
 
