@@ -1,87 +1,100 @@
 version: "3.9"
 
 services:
-  qbittorrent:
-    container_name: qbittorrent
-    image: ghcr.io/hotio/qbittorrent
-    ports:
-      - "8080:8080"
+  transmission:
+    container_name: transmission
+    hostname: transmission
+    image: lscr.io/linuxserver/transmission:latest
     environment:
       - PUID=1000
       - PGID=1000
-      - UMASK=002
       - TZ=Asia/Calcutta
+      - USER=$USER
+      - PASS=$PASS
+        # - TRANSMISSION_WEB_HOME=
+        #- WHITELIST= #optional
+        #- PEERPORT= #optional
+        #- HOST_WHITELIST= #optional
     volumes:
-      - qbittorrent_config:/config
-      - /mnt/storage/toshiba/movies/:/movies
-      - /mnt/storage/toshiba/tv:/tv
-      - /mnt/storage/toshiba/anime/:/anime
-      - /mnt/storage/toshiba2/movies/:/movies2
-      - /mnt/storage/toshiba2/tv:/tv2
-      - /mnt/storage/toshiba2/anime/:/anime2
-    networks:
-        - transfer-net
+      - client:/config
+      - /mnt/storage/toshiba_500gb/downloads:/downloads #optional
+      - /mnt/storage/toshiba_500gb/downloads/watch:/watch #optional
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
     restart: unless-stopped
 
-  radarr:
-    container_name: radarr
-    image: ghcr.io/hotio/radarr
-    ports:
-      - "8081:7878"
+  flood:
+    container_name: flood
+    hostname: flood
+    image: jesec/flood
+    user: 1000:1000
+    command: --port 3001 --allowedpath /data
     environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
-      - TZ=Asia/Calcutta
-    volumes:
-      - radarr_config:/config
-      - /mnt/storage/toshiba/movies:/movies
-      - /mnt/storage/toshiba2/movies:/movies2
-    networks:
-      - transfer-net
-    restart: unless-stopped
-
-  sonarr:
-    container_name: sonarr
-    image: ghcr.io/hotio/sonarr
+      HOME: /config
     ports:
-      - "8082:8989"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - UMASK=002
-      - TZ=Asia/Calcutta
+      - 8080:3001
     volumes:
-      - sonarr_config:/config
-      - /mnt/storage/toshiba2/anime:/anime2
-      - /mnt/storage/toshiba2/tv:/tv2
-      - /mnt/storage/toshiba/anime:/anime
-      - /mnt/storage/toshiba/tv:/tv
-    networks:
-      - transfer-net
+      - client:/config
+      - /mnt/storage/toshiba_500gb/downloads:/data #optional
     restart: unless-stopped
 
   jackett:
     container_name: jackett
-    image: ghcr.io/hotio/jackett
-    ports:
-      - "8083:9117"
+    image: lscr.io/linuxserver/jackett:latest
     environment:
       - PUID=1000
       - PGID=1000
-      - UMASK=002
+      - TZ=Asia/Calcutta
+      - AUTO_UPDATE=true
+    volumes:
+      - jackett:/config
+        #- /path/to/blackhole:/downloads
+    ports:
+      - 8081:9117
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
       - TZ=Asia/Calcutta
     volumes:
-      - jackett_config:/config
-    networks:
-      - transfer-net
+      - radarr:/config
+      - /mnt/storage/toshiba_1tb/movies:/movies #optional
+      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads #optional
+    ports:
+      - 8082:7878
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Calcutta
+    volumes:
+      - sonarr:/config
+      - /mnt/storage/toshiba_1tb/tv:/tv #optional
+      - /mnt/storage/toshiba_1tb/anime:/anime #optional
+      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads #optional
+    ports:
+      - 8083:8989
     restart: unless-stopped
 
 volumes:
-  qbittorrent_config:
-  radarr_config:
-  sonarr_config:
-  jackett_config:
+  client:
+    name: client_config
+  jackett:
+    name: jackett_config
+  radarr:
+    name: radarr_config
+  sonarr:
+    name: sonarr_config
 
 networks:
   transfer-net:
