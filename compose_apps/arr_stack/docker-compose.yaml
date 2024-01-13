@@ -65,7 +65,7 @@ services:
     volumes:
       - radarr:/config
       - /mnt/storage/toshiba_1tb/movies:/movies #optional
-      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads #optional
+      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads/complete #optional
     ports:
       - 8082:7878
     restart: unless-stopped
@@ -81,7 +81,7 @@ services:
       - sonarr:/config
       - /mnt/storage/toshiba_1tb/tv:/tv #optional
       - /mnt/storage/toshiba_1tb/anime:/anime #optional
-      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads #optional
+      - /mnt/storage/toshiba_500gb/downloads/complete:/downloads/complete #optional
     ports:
       - 8083:8989
     restart: unless-stopped
