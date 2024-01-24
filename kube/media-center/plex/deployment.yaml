@@ -28,17 +28,10 @@ spec:
         nfs:
           server: wiscos
           path: /mnt/storage/toshiba_1tb
-          readOnly: true
       - name: toshiba-500gb
         nfs:
           server: wiscos
           path: /mnt/storage/toshiba_500gb
-          readOnly: true
-      - name: wd-240gb
-        nfs:
-          server: wiscos
-          path: /mnt/storage/wd_240gb
-          readOnly: true
       containers:
       - name: plex-server           # < name of container
         image: plexinc/pms-docker   # < the name of the docker image we will use
@@ -49,7 +42,7 @@ spec:
               memory: "1024Mi"
         env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
-          value: claim-n8RuYcRGiXTj81j8vMYZ
+          value: 
         - name: ADVERTISE_IP
           value: http://192.168.1.211:32400    # 
         - name: TZ
@@ -91,10 +84,8 @@ spec:
         volumeMounts:            # < the volume mount in the container. Look at the relation volumelabel->pvc->pv
         - mountPath: /config     # < mount location in the container
           name: config  # < volumelabel configured earlier in the yaml file
-        - mountPath: /toshiba_1tb     # < mount location in the container
+        - mountPath: /media/toshiba_1tb     # < mount location in the container
           name: toshiba-1tb  # < volumelabel configured earlier in the yaml file
-        - mountPath: /toshiba_500gb     # < mount location in the container
+        - mountPath: /media/toshiba_500gb     # < mount location in the container
           name: toshiba-500gb  # < volumelabel configured earlier in the yaml file
-        - mountPath: /wd_240gb     # < mount location in the container
-          name: wd-240gb  # < volumelabel configured earlier in the yaml file
       restartPolicy: Always

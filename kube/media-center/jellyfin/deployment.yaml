@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jellyfin-server               # < label for tagging and reference
+  name: jellyfin-server                # < name of the deployment
+  namespace: media-center           # < namespace where to place the deployment and pods               # < namespace where place the deployment and podsj
+spec:
+  replicas: 1                     # < number of pods to deploy
+  selector:
+    matchLabels:
+      app: jellyfin-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 1                 # < The number of pods that can be created above the desired amount of pods during an update
+      maxUnavailable: 1           # < The number of pods that can be unavailable during the update process
+    type: RollingUpdate           # < New pods are added gradually, and old pods are terminated gradually
+  template:
+    metadata:
+      labels:
+        app: jellyfin-server
+    spec:
+      volumes:
+      - name: config # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: jellyfin-config-claim # < pvc name we created in the previous yaml
+      - name: cache # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: jellyfin-cache-claim # < pvc name we created in the previous yaml
+      - name: toshiba-1tb
+        nfs:
+          server: wiscos
+          path: /mnt/storage/toshiba_1tb
+      - name: toshiba-500gb
+        nfs:
+          server: wiscos
+          path: /mnt/storage/toshiba_500gb
+      containers:
+      - name: jellyfin-server           # < name of container
+        image: jellyfin/jellyfin:latest   # < the name of the docker image we will use
+        imagePullPolicy: Always    # < always use the latest image when creating container/pod
+        resources:
+          requests:
+            limits:
+              memory: "1024Mi"
+        env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/jellyfin
+        - name: JELLYFIN_PublishedServerUrl
+          value: http://192.168.1.212
+        - name: TZ
+          value: Asia/Calcutta  # < Timezone
+        ports:
+        resources: {}
+        stdin: true
+        tty: true
+        volumeMounts:            # < the volume mount in the container. Look at the relation volumelabel->pvc->pv
+        - mountPath: /config     # < mount location in the container
+          name: config  # < volumelabel configured earlier in the yaml file
+        - mountPath: /cache     # < mount location in the container
+          name: cache  # < volumelabel configured earlier in the yaml file
+        - mountPath: /media/toshiba_1tb     # < mount location in the container
+          name: toshiba-1tb  # < volumelabel configured earlier in the yaml file
+        - mountPath: /media/toshiba_500gb     # < mount location in the container
+          name: toshiba-500gb  # < volumelabel configured earlier in the yaml file
+      restartPolicy: Always
