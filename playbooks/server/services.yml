@@ -101,7 +101,7 @@
       loop:
         - --new-service=portainer_agent
         - --service=portainer_agent --set-description="Portainer Agent"
-        - --service=portainer_agent --add-port=9001/tcp
+        - --service=portainer_agent --add-port=9100/tcp
         - --add-service=portainer_agent
     - name: Updating Firewall service rules
       become: true
