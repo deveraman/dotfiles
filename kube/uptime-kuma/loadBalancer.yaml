@@ -5,7 +5,7 @@ metadata:
   name: uptime-kuma
   namespace: uptime-kuma
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.212
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.213
 spec:
   selector:
     app: uptime-kuma
