@@ -1,0 +1,73 @@
+- name: Configure services, cluster and containers
+  hosts: server_nodes
+  vars:
+    k3s_token: supersecretclustertoken
+    master_node: https://192.168.1.201:6443
+  tasks:
+    - name: Setting up k3s node
+      become: true
+      ansible.builtin.shell: >
+        curl -sfL https://get.k3s.io | K3S_TOKEN={{ k3s_token }} sh -s - server --cluster-init --disable=servicelb --disable=traefik
+      when:
+        ansible_hostname == "wiscos"
+    - name: Adding k3s service to firewalld
+      become: true
+      ansible.builtin.shell: >
+        firewall-cmd --permanent {{ item }}
+      loop:
+        - --zone=trusted --add-source=10.42.0.0/16
+        - --zone=trusted --add-source=10.43.0.0/16
+        - --new-service=k3s
+        - --service=k3s --set-description="K3S Firewall Rules"
+        - --service=k3s --add-port=2379/tcp
+        - --service=k3s --add-port=2380/tcp
+        - --service=k3s --add-port=6443/tcp
+        - --service=k3s --add-port=8472/udp
+        - --service=k3s --add-port=10250/tcp
+        - --service=k3s --add-port=51820/udp
+        - --service=k3s --add-port=51821/udp
+        - --add-service=k3s
+    - name: Reloading Firewall
+      become: true
+      ansible.builtin.command: firewall-cmd --reload
+    - name: Adding nodes to k3s cluster
+      become: true
+      ansible.builtin.shell: >
+        curl -sfL https://get.k3s.io | K3S_TOKEN={{ k3s_token }} sh -s - server --server {{ master_node }} --disable=servicelb --disable=traefik
+      when:
+        ansible_hostname == "ashin"
+    - name: Enable user lingering on boot
+      become: true
+      ansible.builtin.command: loginctl enable-linger {{ ansible_env.USER }}
+      changed_when: false
+    - name: Enable podman socket for current user
+      become: true
+      ansible.builtin.systemd_service:
+        name: podman.socket
+        enabled: true
+        state: started
+    - name: Enable NFS Server
+      become: true
+      ansible.builtin.systemd_service:
+        name: nfs-server
+        enabled: true
+        state: started
+    - name: Enable RPC Bind Server
+      become: true
+      ansible.builtin.systemd_service:
+        name: rpcbind
+        enabled: true
+        state: started
+    - name: Updating Firewall service rules
+      become: true
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+      loop:
+        - nfs
+        - rpc-bind
+        - mountd
+    - name: Reloading Firewall
+      become: true
+      ansible.builtin.command: firewall-cmd --reload

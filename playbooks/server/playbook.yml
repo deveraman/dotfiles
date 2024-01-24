@@ -38,12 +38,21 @@
       ansible.builtin.dnf:
         name: "*"
         state: latest
+    - name: Setup cockpit-file-sharing repo
+      become: true
+      ansible.builtin.shell: >
+        sh -c "$(curl -fsSL https://repo.45drives.com/setup)" "" --unattended
     - name: Install tools & additional packages
       ansible.builtin.dnf:
         name:
+          - podman
+          - podman-compose
+          - brightnessctl
           - zsh
           - git
           - tmux
+          - cockpit-file-sharing
+          - cockpit-podman
         state: latest
     - name: Cloning antidote
       become_user: konrad
@@ -75,4 +84,8 @@
     - name: Changing default shell to zsh
       become: true
       ansible.builtin.command: usermod --shell /bin/zsh konrad
+      changed_when: false
+    - name: Setting default brightness to 0
+      become: true
+      ansible.builtin.command: brightnessctl set 0
       changed_when: false
