@@ -20,21 +20,8 @@ spec:
       labels:
         app: jellyfin-server
     spec:
-      volumes:
-      - name: config # < linkname of the volume for the pvc
-        persistentVolumeClaim:
-          claimName: jellyfin-config-claim # < pvc name we created in the previous yaml
-      - name: cache # < linkname of the volume for the pvc
-        persistentVolumeClaim:
-          claimName: jellyfin-cache-claim # < pvc name we created in the previous yaml
-      - name: toshiba-1tb
-        nfs:
-          server: wiscos
-          path: /mnt/storage/toshiba_1tb
-      - name: toshiba-500gb
-        nfs:
-          server: wiscos
-          path: /mnt/storage/toshiba_500gb
+      nodeSelector:
+        kubernetes.io/hostname: wiscos
       containers:
       - name: jellyfin-server           # < name of container
         image: jellyfin/jellyfin:latest   # < the name of the docker image we will use
@@ -61,4 +48,19 @@ spec:
           name: toshiba-1tb  # < volumelabel configured earlier in the yaml file
         - mountPath: /media/toshiba_500gb     # < mount location in the container
           name: toshiba-500gb  # < volumelabel configured earlier in the yaml file
+      volumes:
+      - name: config # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: jellyfin-config-claim # < pvc name we created in the previous yaml
+      - name: cache # < linkname of the volume for the pvc
+        persistentVolumeClaim:
+          claimName: jellyfin-cache-claim # < pvc name we created in the previous yaml
+      - name: toshiba-1tb
+        nfs:
+          server: wiscos
+          path: /mnt/storage/toshiba_1tb
+      - name: toshiba-500gb
+        nfs:
+          server: wiscos
+          path: /mnt/storage/toshiba_500gb
       restartPolicy: Always
