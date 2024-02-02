@@ -58,6 +58,9 @@
         name: rpcbind
         enabled: true
         state: started
+    - name: Enabling podman.socket
+      ansible.builtin.shell: >
+        sh -c "systemctl --user enable --now podman.socket"
     - name: Creating podman volumes directory
       ansible.builtin.file:
         path: ${HOME}/.local/share/containers/storage/volumes

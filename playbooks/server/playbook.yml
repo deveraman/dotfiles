@@ -19,11 +19,6 @@
         path: /etc/systemd/logind.conf
         regexp: '#HandleLidSwitch=suspend'
         replace: 'HandleLidSwitch=ignore'
-    - name: Configure Lid behaviour on external power
-      ansible.builtin.replace:
-        path: /etc/systemd/logind.conf
-        regexp: '#HandleLidSwitchExternalPower=suspend'
-        replace: 'HandleLidSwitchExternalPower=ignore'
     - name: Configure dnf package to opt for fastest mirror
       ansible.builtin.lineinfile:
         path: /etc/dnf/dnf.conf
@@ -47,7 +42,6 @@
         name:
           - podman
           - podman-compose
-          - brightnessctl
           - zsh
           - git
           - tmux
@@ -84,8 +78,4 @@
     - name: Changing default shell to zsh
       become: true
       ansible.builtin.command: usermod --shell /bin/zsh konrad
-      changed_when: false
-    - name: Setting default brightness to 0
-      become: true
-      ansible.builtin.command: brightnessctl set 0
       changed_when: false
