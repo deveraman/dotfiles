@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-udp
+  namespace: network-system
+  annotations:
+    metallb.universe.tf/allow-shared-ip: technitium # < annotation name to combine the Service IP, make sure it's same name as in the service UDP yaml
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.204
+spec:
+  selector:
+    app: technitium
+  ports:
+  - name: dns-service
+    protocol: UDP
+    port: 53
+    targetPort: dns-udp
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-tcp
+  namespace: network-system
+  annotations:
+    metallb.universe.tf/allow-shared-ip: technitium
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.204
+spec:
+  selector:
+    app: technitium
+  ports:
+  - name: dns-service
+    protocol: TCP
+    port: 53
+    targetPort: dns-tcp
+  - name: http-console
+    protocol: TCP
+    port: 5380
+    targetPort: http-console
+  - name: https-console
+    protocol: TCP
+    port: 53443
+    targetPort: https-console
+  externalTrafficPolicy: Local
+  type: LoadBalancer

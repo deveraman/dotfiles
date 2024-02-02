@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-kubernetes
+  namespace: network-system
+spec:
+  selector:
+    matchLabels:
+      name: hello-kubernetes
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hello-kubernetes
+    spec:
+      containers:
+        - name: hello-world
+          image: gcr.io/google-samples/node-hello:1.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: hello-service
+    namespace: network-system
+spec:
+    selector:
+        name: hello-kubernetes
+    type: LoadBalancer
+    ports:
+    - port: 8080
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress
+  namespace: network-system
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - host: hello.local
+    http:
+      paths:
+      - path: /
+        pathType: Exact
+        backend:
+          service:
+            name: hello-service
+            port:
+              number: 8080
