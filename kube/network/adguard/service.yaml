@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: adguard-service
+  namespace: network-system
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.204
+spec:
+  selector:
+    app: adguard
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    name: http-initial
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    name: http
+  - protocol: UDP
+    port: 53
+    targetPort: 53
+    name: dns
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+---
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adguard-dashboard-ingress
+  namespace: default
+spec:
+  rules:
+  - host: adguard.home.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: adguard-service
+            port:
+              number: 3000
