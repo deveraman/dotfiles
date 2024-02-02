@@ -1,0 +1,39 @@
+# https://kubernetes.io/docs/concepts/services-networking/service/
+apiVersion: v1
+kind: Service
+metadata:
+  name: portainer-ui
+  namespace: portainer
+spec:
+  selector:
+    app.kubernetes.io/name: portainer
+    app.kubernetes.io/instance: portainer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 9000
+      targetPort: 9000
+    - name: https
+      protocol: TCP
+      port: 9443
+      targetPort: 9443
+---
+# https://kubernetes.io/docs/concepts/services-networking/ingress/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: portainer-http-ingress
+  namespace: portainer
+spec:
+  rules:
+  - host: portainer.home.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: portainer-ui
+            port:
+              number: 9000
+---

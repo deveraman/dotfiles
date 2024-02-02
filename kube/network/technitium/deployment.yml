@@ -15,6 +15,8 @@ spec:
       labels:
         app: technitium
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: wiscos
       hostname: dns-server
       containers:
       - name: technitium

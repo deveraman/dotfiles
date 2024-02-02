@@ -16,6 +16,8 @@ spec:
       labels:
         app: traefik
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: wiscos
       serviceAccountName: traefik-account
       containers:
         - name: traefik
