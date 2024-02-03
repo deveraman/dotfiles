@@ -32,9 +32,9 @@ spec:
               memory: "1024Mi"
         env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
-          value: 
+          value: claim-2p9MaVFR8yQk2YzVRUrr
         - name: ADVERTISE_IP
-          value: http://192.168.1.211:32400    # 
+          value: http://plex.homelab.maranix.in
         - name: TZ
           value: Asia/Calcutta  # < Timezone
         ports:

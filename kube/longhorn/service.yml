@@ -20,7 +20,7 @@ metadata:
   namespace: longhorn-system
 spec:
   rules:
-  - host: longhorn.home.local
+  - host: longhorn.homelab.maranix.in
     http:
       paths:
       - path: /

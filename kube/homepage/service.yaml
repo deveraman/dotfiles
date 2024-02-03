@@ -4,12 +4,9 @@ kind: Service
 metadata:
   name: homepage
   namespace: default
-  annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.209
 spec:
   selector:
     app.kubernetes.io/name: homepage
-  type: LoadBalancer
   ports:
   - name: app
     protocol: TCP

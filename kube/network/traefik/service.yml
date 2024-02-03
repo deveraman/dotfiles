@@ -41,7 +41,7 @@ metadata:
   namespace: network-system
 spec:
   rules:
-  - host: traefik.home.local
+  - host: traefik.homelab.maranix.in
     http:
       paths:
       - path: /

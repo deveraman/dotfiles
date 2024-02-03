@@ -32,7 +32,7 @@ metadata:
   namespace: default
 spec:
   rules:
-  - host: adguard.home.local
+  - host: adguard.homelab.maranix.in
     http:
       paths:
       - path: /

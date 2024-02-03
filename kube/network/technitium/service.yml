@@ -45,7 +45,7 @@ metadata:
   namespace: network-system
 spec:
   rules:
-  - host: technitium.home.local
+  - host: technitium.homelab.maranix.in
     http:
       paths:
       - path: /
