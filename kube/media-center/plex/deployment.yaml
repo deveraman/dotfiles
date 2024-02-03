@@ -34,7 +34,7 @@ spec:
         - name: PLEX_CLAIM
           value: claim-2p9MaVFR8yQk2YzVRUrr
         - name: ADVERTISE_IP
-          value: http://plex.homelab.maranix.in
+          value: http://192.168.1.206:32400
         - name: TZ
           value: Asia/Calcutta  # < Timezone
         ports:

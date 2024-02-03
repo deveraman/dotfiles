@@ -3,6 +3,9 @@ apiVersion: v1
 metadata:
   name: plex-udp              # < name of the service
   namespace: media-center       # < namespace where to place service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: plex-server
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.206
 spec:
   selector:
     app: plex-server           # < reference to the deployment (connects the service with the deployment)
@@ -31,12 +34,16 @@ spec:
     targetPort: 32414
     name: gdm-32414
     protocol: UDP
+  type: LoadBalancer
 ---
 kind: Service
 apiVersion: v1
 metadata:
   name: plex-tcp              # < name of the service
   namespace: media-center       # < namespace where to place service
+  annotations:
+    metallb.universe.tf/allow-shared-ip: plex-server
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.206
 spec:
   selector:
     app: plex-server           # < reference to the deployment (connects the service with the deployment)
@@ -56,6 +63,7 @@ spec:
     targetPort: 32469
     name: dlna-tcp
     protocol: TCP
+  type: LoadBalancer
 ---
 # https://kubernetes.io/docs/concepts/services-networking/ingress/
 apiVersion: networking.k8s.io/v1
