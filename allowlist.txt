@@ -1,0 +1,2 @@
+0.0.0.0 nse-india.com
+0.0.0.0 nseindia.com
