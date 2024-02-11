@@ -22,7 +22,6 @@
          - fzf
          - ripgrep
          - neovim
-         - ghcup
          - go
        state: latest
     - community.general.homebrew_cask:
