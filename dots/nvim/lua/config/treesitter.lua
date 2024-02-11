@@ -1,7 +1,6 @@
 local ensure_installed = {
     "dart",
     "go",
-    "haskell",
     "javascript",
     "lua",
     "query",
@@ -9,6 +8,7 @@ local ensure_installed = {
     "tsx",
     "vim",
     "vimdoc",
+    "vue",
 }
 
 require 'nvim-treesitter.configs'.setup {

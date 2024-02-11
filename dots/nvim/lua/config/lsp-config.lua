@@ -3,11 +3,12 @@ local util = require('util')
 
 local ensure_installed = {
     'gopls',
+    'lua_ls',
     'pyright',
     'ruff_lsp',
     'rust_analyzer',
-    'svelte',
     'tsserver',
+    'volar',
 }
 
 local servers = {
@@ -16,8 +17,8 @@ local servers = {
     'pyright',
     'ruff_lsp',
     'rust_analyzer',
-    'svelte',
     'tsserver',
+    'volar',
 }
 
 require('mason').setup()
