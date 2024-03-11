@@ -21,7 +21,7 @@ spec:
       containers:
       - name: technitium
         image: technitium/dns-server:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: TZ
           value: Asia/Calcutta
@@ -57,4 +57,3 @@ spec:
           persistentVolumeClaim:
             claimName: technitium-config-claim
       restartPolicy: Always
----

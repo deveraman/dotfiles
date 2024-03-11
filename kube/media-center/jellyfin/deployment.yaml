@@ -56,11 +56,9 @@ spec:
         persistentVolumeClaim:
           claimName: jellyfin-cache-claim # < pvc name we created in the previous yaml
       - name: toshiba-1tb
-        nfs:
-          server: wiscos
+        hostPath: 
           path: /mnt/storage/toshiba_1tb
       - name: toshiba-500gb
-        nfs:
-          server: wiscos
+        hostPath: 
           path: /mnt/storage/toshiba_500gb
       restartPolicy: Always

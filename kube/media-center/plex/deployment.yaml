@@ -32,7 +32,7 @@ spec:
               memory: "1024Mi"
         env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
-          value: claim-2p9MaVFR8yQk2YzVRUrr
+          value: claim-EqzzUuHnQSZc93MKscDg
         - name: ADVERTISE_IP
           value: http://192.168.1.206:32400
         - name: TZ
@@ -83,11 +83,9 @@ spec:
         persistentVolumeClaim:
           claimName: pms-config-claim # < pvc name we created in the previous yaml
       - name: toshiba-1tb
-        nfs:
-          server: wiscos
+        hostPath: 
           path: /mnt/storage/toshiba_1tb
       - name: toshiba-500gb
-        nfs:
-          server: wiscos
+        hostPath: 
           path: /mnt/storage/toshiba_500gb
       restartPolicy: Always
