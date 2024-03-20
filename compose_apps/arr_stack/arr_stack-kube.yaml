@@ -1,0 +1,164 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: arr_stack
+spec:
+  containers:
+  - env:
+    - name: TZ
+      value: Asia/Calcutta
+    - name: USER
+      value: admin
+    - name: PASS
+      value: admin
+    image: lscr.io/linuxserver/transmission:latest
+    name: transmission
+    ports:
+    - containerPort: 9091
+      hostPort: 9091
+    - containerPort: 51413
+      hostPort: 51413
+    - containerPort: 51413
+      hostPort: 51413
+      protocol: udp
+    securityContext:
+      runAsUser: 0
+    volumeMounts:
+    - mountPath: /config
+      name: client
+    - mountPath: /downloads:z
+      name: transmission-downloads
+    - mountPath: /watch:z
+      name: transmission-watch
+  - args:
+    - --port
+    - '3001'
+    - --allowedpath
+    - /data
+    env:
+    - name: HOME
+      value: /config
+    image: jesec/flood
+    name: flood
+    ports:
+    - containerPort: 3001
+      hostPort: 8080
+    securityContext:
+      runAsUser: 0
+    volumeMounts:
+    - mountPath: /config
+      name: client
+    - mountPath: /data:z
+      name: flood-data
+  - env:
+    - name: PUID
+      value: '0'
+    - name: PGID
+      value: '0'
+    - name: TZ
+      value: Asia/Calcutta
+    - name: AUTO_UPDATE
+      value: 'true'
+    image: lscr.io/linuxserver/jackett:latest
+    name: jackett
+    ports:
+    - containerPort: 9117
+      hostPort: 8081
+    volumeMounts:
+    - mountPath: /config
+      name: jackett
+  - env:
+    - name: PUID
+      value: '0'
+    - name: PGID
+      value: '0'
+    - name: TZ
+      value: Asia/Calcutta
+    image: lscr.io/linuxserver/radarr:latest
+    name: radarr
+    ports:
+    - containerPort: 7878
+      hostPort: 8082
+    volumeMounts:
+    - mountPath: /config
+      name: radarr
+    - mountPath: /movies:z
+      name: radarr-movies
+    - mountPath: /movies2:z
+      name: radarr-movies2
+    - mountPath: /downloads/complete:z
+      name: radarr-downloads-complete
+  - env:
+    - name: PUID
+      value: '0'
+    - name: PGID
+      value: '0'
+    - name: TZ
+      value: Asia/Calcutta
+    image: lscr.io/linuxserver/sonarr:latest
+    name: sonarr
+    ports:
+    - containerPort: 8989
+      hostPort: 8083
+    volumeMounts:
+    - mountPath: /config
+      name: sonarr
+    - mountPath: /tv:z
+      name: sonarr-tv
+    - mountPath: /anime:z
+      name: sonarr-anime
+    - mountPath: /tv2:z
+      name: sonarr-tv2
+    - mountPath: /anime2:z
+      name: sonarr-anime2
+    - mountPath: /downloads/complete:z
+      name: sonarr-downloads-complete
+  volumes:
+  - name: client
+    persistentVolumeClaim:
+      claimName: client
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/downloads
+    name: transmission-downloads
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/downloads/watch
+    name: transmission-watch
+  - name: client
+    persistentVolumeClaim:
+      claimName: client
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/downloads
+    name: flood-data
+  - name: jackett
+    persistentVolumeClaim:
+      claimName: jackett
+  - name: radarr
+    persistentVolumeClaim:
+      claimName: radarr
+  - hostPath:
+      path: /mnt/storage/toshiba_1tb/movies
+    name: radarr-movies
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/movies
+    name: radarr-movies2
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/downloads/complete
+    name: radarr-downloads-complete
+  - name: sonarr
+    persistentVolumeClaim:
+      claimName: sonarr
+  - hostPath:
+      path: /mnt/storage/toshiba_1tb/tv
+    name: sonarr-tv
+  - hostPath:
+      path: /mnt/storage/toshiba_1tb/anime
+    name: sonarr-anime
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/tv
+    name: sonarr-tv2
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/anime
+    name: sonarr-anime2
+  - hostPath:
+      path: /mnt/storage/toshiba_500gb/downloads/complete
+    name: sonarr-downloads-complete
