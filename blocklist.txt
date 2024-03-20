@@ -18,7 +18,6 @@ https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/bl
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/firebog/Prigent-Ads.fork.txt
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/jerryn70/GoodbyeAds.fork.txt
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/kboghdady/youtubelist.fork.txt
-https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/r-a-y/AdguardMobileAds.fork.txt
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/sefinek.hosts.txt
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/ads/yoyo/ads-trackers-etc.fork.txt
 https://raw.githubusercontent.com/sefinek24/Sefinek-Blocklist-Collection/main/blocklists/generated/0.0.0.0/amp/developerdan/amp-hosts-extended.fork.txt
