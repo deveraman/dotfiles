@@ -1,2 +1,5 @@
 0.0.0.0 nse-india.com
 0.0.0.0 nseindia.com
+0.0.0.0 stat1.moneycontrol.com
+0.0.0.0 stat2.moneycontrol.com
+0.0.0.0 stat3.moneycontrol.com
