@@ -1,0 +1,67 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgres-service
+  namespace: databases
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pg-dbs
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.207
+spec:
+  selector:
+    app: pg-dbs
+  ports:
+  - port: 8080
+    targetPort: 5432
+    name: db-tcp
+    protocol: TCP
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: timescale-service
+  namespace: databases
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pg-dbs
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.207
+spec:
+  selector:
+    app: pg-dbs
+  ports:                      
+  - port: 8081
+    targetPort: 5433
+    name: db-tcp
+    protocol: TCP
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pgadmin-service
+  namespace: databases
+spec:
+  selector:
+    app: pg-dbs
+  ports:                      
+  - port: 80
+    targetPort: http
+    protocol: TCP
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pgadmin-ingress
+  namespace: databases
+spec:
+  rules:
+  - host: pgadmin.homelab.maranix.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: pgadmin-service
+            port:
+              number: 80

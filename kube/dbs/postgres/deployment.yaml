@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  pg-dbs
+  namespace: databases
+  labels:
+    app:  pg-dbs
+spec:
+  selector:
+    matchLabels:
+      app: pg-dbs
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  pg-dbs
+    spec:
+      containers:
+      - name: pgadmin
+        image:  dpage/pgadmin4:8
+        imagePullPolicy: Always
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+        env:
+          - name: PGADMIN_DEFAULT_EMAIL
+            value: admin@maranix.com
+          - name: PGADMIN_DEFAULT_PASSWORD
+            value: admin
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        volumeMounts:
+        - name: admin-config
+          mountPath: /var/lib/pgadmin
+
+      - name: postgres
+        image:  postgres:16
+        imagePullPolicy: Always
+        env:
+          - name: POSTGRES_PASSWORD
+            value: admin
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - name: pg-data
+          mountPath: /var/lib/postgresql/data
+
+      - name: timescale
+        image:  timescale/timescaledb-ha:pg16
+        imagePullPolicy: Always
+        env:
+          - name: POSTGRES_PASSWORD
+            value: admin
+          - name: PGPORT
+            value: "5433"
+        ports:
+        - containerPort: 5433
+          protocol: TCP
+        volumeMounts:
+        - name: ts-data
+          mountPath: /var/lib/postgresql/data
+
+      volumes:
+        - name: admin-config
+          persistentVolumeClaim:
+            claimName: pgadmin-data
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: postgres-data
+        - name: ts-data
+          persistentVolumeClaim:
+            claimName: timescale-data
+      restartPolicy: Always
+---
