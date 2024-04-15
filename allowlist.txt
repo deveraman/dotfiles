@@ -4,3 +4,4 @@
 0.0.0.0 stat2.moneycontrol.com
 0.0.0.0 stat3.moneycontrol.com
 0.0.0.0 fc.yahoo.com
+0.0.0.0 amazonvideo.com
