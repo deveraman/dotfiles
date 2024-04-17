@@ -1,3 +1,6 @@
+#POETRY
+export PATH=$PATH:$HOME/.local/bin
+
 #NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
