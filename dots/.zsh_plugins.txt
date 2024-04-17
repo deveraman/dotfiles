@@ -1,0 +1,4 @@
+sindresorhus/pure
+
+zsh-users/zsh-autosuggestions kind:defer
+zdharma-continuum/fast-syntax-highlighting kind:defer
