@@ -11,9 +11,10 @@ local ensure_installed = {
     'volar',
 }
 
-local servers = {
+local lsp_list = {
     'dartls',
     'gopls',
+    'lua_ls',
     'pyright',
     'ruff_lsp',
     'rust_analyzer',
@@ -29,6 +30,6 @@ require('mason-lspconfig').setup({
     }
 })
 
-for _, server in ipairs(servers) do
-    util.set_server_config(server)
+for _, lsp in ipairs(lsp_list) do
+    util.set_server_config(lsp)
 end
