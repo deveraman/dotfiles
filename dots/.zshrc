@@ -1,3 +1,6 @@
+##Flutter
+export PATH=$PATH:$HOME/fvm/default/bin
+
 #POETRY
 export PATH=$PATH:$HOME/.local/bin
 
