@@ -43,7 +43,7 @@ declare scripts=(
 )
 
 function is_mac() {
-    if [[ OS == "Darwin" ]]; then
+    if [[ $OS == "Darwin" ]]; then
         return 1
     else
         return 0
@@ -55,7 +55,8 @@ function process_scripts () {
         sh -c "($s)"
     done
 
-    if is_mac; then
+    is_mac
+    if [[ $? == 1 ]]; then
        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL $HOMEBREW)"
     fi
 }
@@ -70,15 +71,28 @@ function install_pkgs() {
 
 
     $pkg_installer "${PKG_COMMON[@]}"
-    if ! is_mac; then
+
+    is_mac
+    if [[ $? == 0 ]]; then
         $pkg_installer "${PKG_LINUX[@]}"
     fi
 }
 
+function install_configs () {
+    for s in "${scripts[@]:6}"; do
+        sh -c "($s)"
+    done
+}
+
 function uninstall_homebrew() {
-    if is_mac; then
+    is_mac
+    if [[ $? == 1 ]]; then
         NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
     fi
+}
+
+function uninstall_poetry() {
+    /bin/bash -c "$(curl -sSL https://install.python-poetry.org | python3 - --uninstall)"
 }
 
 function run() {
@@ -96,7 +110,9 @@ Expected a function name as an argument.
 
 1. process_scripts # Runs all the shell scripts languages/tools/zsh_configs
 2. install_pkgs # Install packages
-3. run # Runs both of the above commands
+3. install_configs # Installs configuration files
+4. run # Runs both of the above commands
+5. uninstall_ # _ followed by the pkg name
     "
     exit 1
 fi
