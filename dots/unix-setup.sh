@@ -54,7 +54,6 @@ function process_scripts () {
     for s in "${scripts[@]}"; do
         sh -c "($s)"
     done
-    $HOME/.fzf/install
 
     is_mac
     if [[ $? == 1 ]]; then
