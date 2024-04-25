@@ -9,6 +9,7 @@ export PATH=$PATH:$HOME/fvm/default/bin
 export PATH=$PATH:$HOME/.local/bin
 
 # Set up fzf key bindings and fuzzy completion
+export PATH=$PATH:$HOME/.fzf/bin
 eval "$(fzf --zsh)"
 bindkey "ç" fzf-cd-widget
 
