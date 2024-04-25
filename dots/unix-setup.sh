@@ -75,7 +75,7 @@ function install_pkgs() {
     is_mac
     if [[ $? == 0 ]]; then
         if [[ $(awk -F= '/VARIANT_ID=/ {print $2}' /etc/os-release) == 'silverblue' ]]; then
-            rpm-ostree "${PKG_LINUX[@]}"
+            rpm-ostree "${PKG_LINUX[@]}" kitty
         else
             $pkg_installer "${PKG_LINUX[@]}"
         fi
