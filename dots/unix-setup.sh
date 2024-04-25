@@ -14,7 +14,7 @@
 OS="$(uname -s)"
 
 # packages
-PKG_COMMON=(tmux gh fzf ripgrep neovim)
+PKG_COMMON=(tmux gh ripgrep neovim kitty)
 PKG_LINUX=(zsh)
 
 # an array of excutable scripts
@@ -24,7 +24,7 @@ NVM="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 FVM="https://fvm.app/install.sh"
 G_GVM="https://git.io/g-install"
 POETRY="https://install.python-poetry.org"
-KITTY="https://sw.kovidgoyal.net/kitty/installer.sh"
+FZF="https://github.com/junegunn/fzf.git"
 KITTY_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/kitty/kitty.conf"
 ZSHRC="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zshrc"
 ZSH_PLUGINS="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zsh_plugins.txt"
@@ -35,7 +35,7 @@ declare scripts=(
 "curl -fsSL $FVM | bash"
 "curl -sSL $G_GVM | sh -s -- bash zsh -y"
 "curl -sSL $POETRY | python3 -"
-"curl -L $KITTY | sh /dev/stdin"
+"git clone --depth 1 $FZF ~/.fzf"
 "curl -fsSL $KITTY_CONF > ~/.config/kitty/kitty.conf"
 "curl -fsSL $ZSHRC > ~/.zshrc"
 "curl -fsSL $ZSH_PLUGINS > ~/.zsh_plugins.txt"
@@ -54,6 +54,7 @@ function process_scripts () {
     for s in "${scripts[@]}"; do
         sh -c "($s)"
     done
+    $HOME/.fzf/install
 
     is_mac
     if [[ $? == 1 ]]; then
@@ -63,18 +64,21 @@ function process_scripts () {
 
 function install_pkgs() {
     local pkg_installer
-    if is_mac; then
+    is_mac
+    if [[ $? == 1 ]]; then
         pkg_installer="brew install"
     else
-        pkg_installer="sudo dnf -y"
+        pkg_installer="sudo dnf install -y"
     fi
 
-
     $pkg_installer "${PKG_COMMON[@]}"
-
     is_mac
     if [[ $? == 0 ]]; then
-        $pkg_installer "${PKG_LINUX[@]}"
+        if [[ $(awk -F= '/VARIANT_ID=/ {print $2}' /etc/os-release) == 'silverblue' ]]; then
+            rpm-ostree "${PKG_LINUX[@]}"
+        else
+            $pkg_installer "${PKG_LINUX[@]}"
+        fi
     fi
 }
 

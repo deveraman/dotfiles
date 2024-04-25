@@ -1,7 +1,11 @@
-##Flutter
+# Kitty
+export PATH=$PATH:$HOME/.local/kitty.app/bin
+
+# Flutter
+export PATH=$PATH:$HOME/.fvm_flutter/bin
 export PATH=$PATH:$HOME/fvm/default/bin
 
-#POETRY
+# POETRY
 export PATH=$PATH:$HOME/.local/bin
 
 # Set up fzf key bindings and fuzzy completion
