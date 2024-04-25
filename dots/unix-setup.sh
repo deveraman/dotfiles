@@ -74,11 +74,7 @@ function install_pkgs() {
     $pkg_installer "${PKG_COMMON[@]}"
     is_mac
     if [[ $? == 0 ]]; then
-        if [[ $(awk -F= '/VARIANT_ID=/ {print $2}' /etc/os-release) == 'silverblue' ]]; then
-            rpm-ostree "${PKG_LINUX[@]}" kitty
-        else
-            $pkg_installer "${PKG_LINUX[@]}"
-        fi
+        $pkg_installer "${PKG_LINUX[@]}"
     fi
 }
 
@@ -86,6 +82,10 @@ function install_configs () {
     for s in "${scripts[@]:6}"; do
         sh -c "($s)"
     done
+}
+
+function install_silverblue() {
+    rpm-ostree "${PKG_LINUX[@]}" kitty
 }
 
 function uninstall_homebrew() {
@@ -115,8 +115,9 @@ Expected a function name as an argument.
 1. process_scripts # Runs all the shell scripts languages/tools/zsh_configs
 2. install_pkgs # Install packages
 3. install_configs # Installs configuration files
-4. run # Runs both of the above commands
-5. uninstall_ # _ followed by the pkg name
+4. install_sliverblue # Installs base packages for silverblue
+5. run # Runs both of the above commands
+6. uninstall_ # _ followed by the pkg name
     "
     exit 1
 fi
