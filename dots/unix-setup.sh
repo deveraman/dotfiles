@@ -25,9 +25,6 @@ FVM="https://fvm.app/install.sh"
 G_GVM="https://git.io/g-install"
 POETRY="https://install.python-poetry.org"
 FZF="https://github.com/junegunn/fzf.git"
-KITTY_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/kitty/kitty.conf"
-ZSHRC="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zshrc"
-ZSH_PLUGINS="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zsh_plugins.txt"
 ANTIDOTE="https://github.com/mattmc3/antidote.git"
 declare scripts=(
 "curl --proto '=https' --tlsv1.2 -sSf $RUST | sh -s -- -y"
@@ -36,10 +33,17 @@ declare scripts=(
 "curl -sSL $G_GVM | sh -s -- bash zsh -y"
 "curl -sSL $POETRY | python3 -"
 "git clone --depth 1 $FZF ~/.fzf"
+"git clone --depth=1 $ANTIDOTE ${ZDOTDIR:-$HOME}/.antidote"
+)
+
+# configs
+KITTY_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/kitty/kitty.conf"
+ZSHRC="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zshrc"
+ZSH_PLUGINS="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zsh_plugins.txt"
+declare configs=(
 "curl -fsSL $KITTY_CONF > ~/.config/kitty/kitty.conf"
 "curl -fsSL $ZSHRC > ~/.zshrc"
 "curl -fsSL $ZSH_PLUGINS > ~/.zsh_plugins.txt"
-"git clone --depth=1 $ANTIDOTE ${ZDOTDIR:-$HOME}/.antidote"
 )
 
 function is_mac() {
@@ -78,7 +82,7 @@ function install_pkgs() {
 }
 
 function install_configs () {
-    for s in "${scripts[@]:6}"; do
+    for s in "${configs[@]}"; do
         sh -c "($s)"
     done
 }
@@ -99,6 +103,7 @@ function uninstall_poetry() {
 }
 
 function run() {
+    install_configs
     process_scripts
     install_pkgs
 }
