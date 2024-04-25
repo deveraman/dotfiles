@@ -85,7 +85,7 @@ function install_configs () {
 }
 
 function install_silverblue() {
-    rpm-ostree "${PKG_LINUX[@]}" kitty
+    rpm-ostree install "${PKG_LINUX[@]}" kitty
 }
 
 function uninstall_homebrew() {
