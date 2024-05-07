@@ -7,6 +7,7 @@ local ensure_installed = {
     'pyright',
     'ruff_lsp',
     'rust_analyzer',
+    'tailwindcss',
     'tsserver',
     'volar',
 }
@@ -18,6 +19,7 @@ local lsp_list = {
     'pyright',
     'ruff_lsp',
     'rust_analyzer',
+    'tailwindcss',
     'tsserver',
     'volar',
 }

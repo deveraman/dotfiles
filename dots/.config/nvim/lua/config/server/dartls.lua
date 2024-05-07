@@ -1,8 +1,8 @@
-function dartHotReload()
-  vim.cmd[[silent execute '!kill -s USR1 "$(pgrep -f flutter_tools.snapshot\ run)" &> /dev/null']]
+function DartHotReload()
+    vim.cmd [[silent execute '!kill -s USR1 "$(pgrep -f flutter_tools.snapshot\ run)" &> /dev/null']]
 end
 
-vim.cmd[[autocmd BufWritePost *.dart lua dartHotReload()]]
+vim.cmd [[autocmd BufWritePost *.dart lua DartHotReload()]]
 
 return {
     cmd = { 'dart', 'language-server', '--protocol=lsp' },
