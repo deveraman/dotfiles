@@ -1,3 +1,6 @@
+# Set kitty theme
+kitty +kitten themes kanagawa_dragon
+
 # Flutter
 export PATH=$PATH:$HOME/.fvm_flutter/bin
 export PATH=$PATH:$HOME/fvm/default/bin
@@ -26,6 +29,7 @@ function load_nvm() {
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 }
+
 # Initialize worker
 async_start_worker nvm_worker -n
 async_register_callback nvm_worker load_nvm
