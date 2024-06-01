@@ -2,37 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: plex-server               # < label for tagging and reference
-  name: plex-server                # < name of the deployment
+    app: plex               # < label for tagging and reference
+  name: plex                # < name of the deployment
   namespace: media-center           # < namespace where to place the deployment and pods               # < namespace where place the deployment and podsj
 spec:
   replicas: 1                     # < number of pods to deploy
   selector:
     matchLabels:
-      app: plex-server
-  strategy:
-    rollingUpdate:
-      maxSurge: 1                 # < The number of pods that can be created above the desired amount of pods during an update
-      maxUnavailable: 1           # < The number of pods that can be unavailable during the update process
-    type: RollingUpdate           # < New pods are added gradually, and old pods are terminated gradually
+      app: plex
   template:
     metadata:
       labels:
-        app: plex-server
+        app: plex
     spec:
       nodeSelector:
         kubernetes.io/hostname: wiscos
       containers:
-      - name: plex-server           # < name of container
+      - name: plex           # < name of container
         image: plexinc/pms-docker   # < the name of the docker image we will use
         imagePullPolicy: Always    # < always use the latest image when creating container/pod
-        resources:
-          requests:
-            limits:
-              memory: "1024Mi"
         env:                       # < environment variables. See https://hub.docker.com/r/linuxserver/plex
         - name: PLEX_CLAIM
-          value: claim-EqzzUuHnQSZc93MKscDg
+          value: claim-hzLsnEdzvzabwsPs2zFs
         - name: ADVERTISE_IP
           value: http://192.168.1.206:32400
         - name: TZ
@@ -68,9 +59,6 @@ spec:
         - containerPort: 32414
           name: gdm-32414
           protocol: UDP
-        resources: {}
-        stdin: true
-        tty: true
         volumeMounts:            # < the volume mount in the container. Look at the relation volumelabel->pvc->pv
         - mountPath: /config     # < mount location in the container
           name: config  # < volumelabel configured earlier in the yaml file
@@ -78,6 +66,8 @@ spec:
           name: toshiba-1tb  # < volumelabel configured earlier in the yaml file
         - mountPath: /media/toshiba_500gb     # < mount location in the container
           name: toshiba-500gb  # < volumelabel configured earlier in the yaml file
+        - mountPath: /dev/dri     # < mount location in the container
+          name: quicksync  # < volumelabel configured earlier in the yaml file
       volumes:
       - name: config # < linkname of the volume for the pvc
         persistentVolumeClaim:
@@ -88,4 +78,7 @@ spec:
       - name: toshiba-500gb
         hostPath: 
           path: /mnt/storage/toshiba_500gb
+      - name: quicksync
+        hostPath: 
+          path: /dev/dri
       restartPolicy: Always
