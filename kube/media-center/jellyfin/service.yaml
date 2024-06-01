@@ -5,7 +5,7 @@ metadata:
   namespace: media-center       # < namespace where to place service
 spec:
   selector:
-    app: jellyfin-server           # < reference to the deployment (connects the service with the deployment)
+    app: jellyfin           # < reference to the deployment (connects the service with the deployment)
   ports:
   - port: 1900                # < port to open on the outside on the server targetPort: 1900          # < targetport. port on the pod to passthrough
     name: dlna-udp            # < reference name for the port in the deployment yaml
@@ -22,7 +22,7 @@ metadata:
   namespace: media-center       # < namespace where to place service
 spec:
   selector:
-    app: jellyfin-server           # < reference to the deployment (connects the service with the deployment)
+    app: jellyfin           # < reference to the deployment (connects the service with the deployment)
   ports:                      
   - port: 8096               # < port to open on the outside on the server
     targetPort: 8096         # < targetport. port on the pod to passthrough
