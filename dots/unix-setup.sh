@@ -19,7 +19,6 @@ PKG_LINUX=(zsh)
 
 # an array of excutable scripts
 HOMEBREW="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
-RUST="https://sh.rustup.rs"
 NVM="https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh"
 FVM="https://fvm.app/install.sh"
 G_GVM="https://git.io/g-install"
@@ -27,7 +26,6 @@ POETRY="https://install.python-poetry.org"
 FZF="https://github.com/junegunn/fzf.git"
 ANTIDOTE="https://github.com/mattmc3/antidote.git"
 declare scripts=(
-"curl --proto '=https' --tlsv1.2 -sSf $RUST | sh -s -- -y"
 "curl -o- $NVM | bash"
 "curl -fsSL $FVM | bash"
 "curl -sSL $G_GVM | sh -s -- bash zsh -y"

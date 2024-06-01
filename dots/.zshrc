@@ -8,6 +8,9 @@ export PATH=$PATH:$HOME/fvm/default/bin
 # POETRY
 export PATH=$PATH:$HOME/.local/bin
 
+# ZIG
+export PATH=$PATH:$HOME/.zig/
+
 # Set up fzf key bindings and fuzzy completion
 export PATH=$PATH:$HOME/.fzf/bin
 eval "$(fzf --zsh)"
