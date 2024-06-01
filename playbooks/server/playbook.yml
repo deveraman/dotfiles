@@ -21,7 +21,7 @@
   tasks:
     - name: Configure Lid behaviour on battery
       ansible.builtin.replace:
-        path: /etc/systemd/logind.conf
+        path: /usr/lib/systemd/logind.conf
         regexp: '#HandleLidSwitch=suspend'
         replace: 'HandleLidSwitch=ignore'
     - name: Configure dnf package to opt for fastest mirror
