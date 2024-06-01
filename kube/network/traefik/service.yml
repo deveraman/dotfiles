@@ -4,19 +4,14 @@ metadata:
   name: traefik-service
   namespace: network-system
   annotations:
+    metallb.universe.tf/allow-shared-ip: "traefik-svc"
     metallb.universe.tf/loadBalancerIPs: 192.168.1.205
 spec:
   selector:
     app: traefik
   ports:
-    - protocol: TCP
-      port: 80
-      name: web
-      targetPort: 80
-    - protocol: TCP
-      port: 443
-      name: websecure
-      targetPort: 80
+    - port: 80
+      targetPort: web
   type: LoadBalancer
 ---
 apiVersion: v1
@@ -24,14 +19,16 @@ kind: Service
 metadata:
   name: traefik-dashboard-service
   namespace: network-system
+  annotations:
+    metallb.universe.tf/allow-shared-ip: "traefik-svc"
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.205
 spec:
   selector:
     app: traefik
   ports:
-    - protocol: TCP
-      port: 8080
-      name: admin
-      targetPort: 8080
+    - port: 8080
+      targetPort: dashboard
+  type: LoadBalancer
 ---
 # https://kubernetes.io/docs/concepts/services-networking/ingress/
 apiVersion: networking.k8s.io/v1
