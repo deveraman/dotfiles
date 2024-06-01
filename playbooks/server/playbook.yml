@@ -60,21 +60,21 @@
         depth: 1
         dest: "~/.antidote"
     - name: Creating .zsh_plugins
-      become_user: "{{ ansible_env.USER }}"
+      become_user: shiki
       copy:
         dest: "~/.zsh_plugins.txt"
         content: "{{ zsh_plugins }}"
     - name: Creating .zshrc & exporting PATHS
-      become_user: "{{ ansible_env.USER }}"
+      become_user: shiki
       copy:
         dest: "~/.zshrc"
         content: |
           {{ zshrc }}
     - name: Changing default shell to zsh
       become: true
-      ansible.builtin.command: usermod --shell /bin/zsh {{ ansible_env.USER }}
+      ansible.builtin.command: usermod --shell /bin/zsh shiki
       changed_when: false
     - name: Enable user lingering on boot
       become: true
-      ansible.builtin.command: loginctl enable-linger {{ ansible_env.USER }}
+      ansible.builtin.command: loginctl enable-linger shiki
       changed_when: false

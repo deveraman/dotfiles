@@ -2,7 +2,7 @@ apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: ip-pool
-  namespace: metallb-system
+  namespace: network-system
 spec:
   addresses:
   - 192.168.1.204-192.168.1.250
@@ -11,7 +11,7 @@ apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
   name: k3s-lb
-  namespace: metallb-system
+  namespace: network-system
 spec:
   ipAddressPools:
     - ip-pool
