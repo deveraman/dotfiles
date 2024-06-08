@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arr-stack
+  namespace: media-center
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arr-stack
+  template:
+    metadata:
+      labels:
+        app: arr-stack
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: wiscos
+      containers:
+      - name: qbittorrent
+        image: lscr.io/linuxserver/qbittorrent:latest
+        env:
+          - name: WEBUI_PORT
+            value: "8080"
+          - name: TORRENTING_PORT
+            value: "6881"
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+        ports:
+        - containerPort: 8080
+          name: torrent
+          protocol: TCP
+        - containerPort: 6881
+          name: api
+          protocol: UDP
+        - containerPort: 6881
+          name: apisecure
+          protocol: TCP
+        volumeMounts:
+        - name: qbittorrent-config
+          mountPath: /config
+        - name: downloads
+          mountPath: /downloads
+      
+      - name: radarr
+        image: lscr.io/linuxserver/radarr:latest
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+        ports:
+        - containerPort: 7878
+          name: radarr
+          protocol: TCP
+        volumeMounts:
+        - name: radarr-config
+          mountPath: /config
+
+        - name: toshiba-1tb  
+          mountPath: /media/toshiba_1tb     
+        - name: toshiba-500gb
+          mountPath: /media/toshiba_500gb     
+        - name: downloads
+          mountPath: /downloads
+
+      - name: sonarr
+        image: lscr.io/linuxserver/sonarr:latest
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+        ports:
+        - containerPort: 8989
+          name: sonarr
+          protocol: TCP
+        volumeMounts:
+        - name: sonarr-config
+          mountPath: /config
+
+        - name: toshiba-1tb  
+          mountPath: /media/toshiba_1tb     
+        - name: toshiba-500gb
+          mountPath: /media/toshiba_500gb     
+        - name: downloads
+          mountPath: /downloads
+
+      - name: jackett
+        image: lscr.io/linuxserver/jackett:latest
+        env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+        ports:
+        - containerPort: 9117
+          name: jackett
+          protocol: TCP
+        volumeMounts:
+        - name: jackett-config
+          mountPath: /config
+
+      volumes:
+      - name: qbittorrent-config
+        persistentVolumeClaim:
+          claimName: qbittorrent-config-pvc
+      - name: radarr-config
+        persistentVolumeClaim:
+          claimName: radarr-config-pvc
+      - name: sonarr-config
+        persistentVolumeClaim:
+          claimName: sonarr-config-pvc
+      - name: jackett-config
+        persistentVolumeClaim:
+          claimName: jackett-config-pvc
+
+      - name: toshiba-1tb
+        hostPath: 
+          path: /mnt/storage/toshiba_1tb
+      - name: toshiba-500gb
+        hostPath: 
+          path: /mnt/storage/toshiba_500gb
+      - name: downloads
+        hostPath: 
+          path: /mnt/storage/toshiba_500gb/downloads
