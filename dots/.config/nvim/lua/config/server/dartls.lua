@@ -1,24 +1,32 @@
-function DartHotReload()
-    vim.cmd [[silent execute '!kill -s USR1 "$(pgrep -f flutter_tools.snapshot\ run)" &> /dev/null']]
-end
-
-vim.cmd [[autocmd BufWritePost *.dart lua DartHotReload()]]
+local util = require 'lspconfig.util'
 
 return {
+  default_config = {
     cmd = { 'dart', 'language-server', '--protocol=lsp' },
     filetypes = { 'dart' },
+    root_dir = util.root_pattern 'pubspec.yaml',
     init_options = {
-        closingLabels = true,
-        flutterOutline = true,
-        onlyAnalyzeProjectsWithOpenFiles = true,
-        outline = true,
-        suggestFromUnimportedLibraries = true
+      onlyAnalyzeProjectsWithOpenFiles = true,
+      suggestFromUnimportedLibraries = true,
+      closingLabels = true,
+      outline = true,
+      flutterOutline = true,
     },
-    root_dir = require('lspconfig.util').root_pattern('pubspec.yaml'),
-    setting = {
-        dart = {
-            completeFunctionCalls = true,
-            showTodos = true
-        }
-    }
+    settings = {
+      dart = {
+        completeFunctionCalls = true,
+        showTodos = true,
+      },
+    },
+  },
+  docs = {
+    description = [[
+https://github.com/dart-lang/sdk/tree/master/pkg/analysis_server/tool/lsp_spec
+
+Language server for dart.
+]],
+    default_config = {
+      root_dir = [[root_pattern("pubspec.yaml")]],
+    },
+  },
 }

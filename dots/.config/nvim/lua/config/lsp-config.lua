@@ -2,6 +2,7 @@ local lsp_zero = require('lsp-zero')
 local util = require('util')
 
 local ensure_installed = {
+    'biome',
     'gopls',
     'lua_ls',
     'pyright',
@@ -13,6 +14,7 @@ local ensure_installed = {
 }
 
 local lsp_list = {
+    'biome',
     'dartls',
     'gopls',
     'lua_ls',
