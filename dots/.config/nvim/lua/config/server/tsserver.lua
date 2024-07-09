@@ -1,22 +1,33 @@
 local util = require 'lspconfig.util'
+local vue_plugin = os.getenv("PNPM_HOME") .. "/global/5/node_modules/@vue/typescript-plugin"
 
 return {
-  default_config = {
-    init_options = { hostInfo = 'neovim' },
-    cmd = { 'typescript-language-server', '--stdio' },
-    filetypes = {
-      'javascript',
-      'javascriptreact',
-      'javascript.jsx',
-      'typescript',
-      'typescriptreact',
-      'typescript.tsx',
+    default_config = {
+        init_options = {
+            hostInfo = 'neovim',
+            plugins = {
+                {
+                    name = "@vue/typescript-plugin",
+                    location = vue_plugin,
+                    languages = { "javascript", "typescript", "vue" },
+                },
+            },
+        },
+        cmd = { 'typescript-language-server', '--stdio' },
+        filetypes = {
+            'javascript',
+            'javascriptreact',
+            'javascript.jsx',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+        },
+        root_dir = util.root_pattern('tsconfig.json', 'jsconfig.json', 'package.json', '.git'),
+        single_file_support = true,
     },
-    root_dir = util.root_pattern('tsconfig.json', 'jsconfig.json', 'package.json', '.git'),
-    single_file_support = true,
-  },
-  docs = {
-    description = [[
+    docs = {
+        description = [[
 https://github.com/typescript-language-server/typescript-language-server
 
 `typescript-language-server` depends on `typescript`. Both packages can be installed via `npm`:
@@ -81,5 +92,5 @@ require'lspconfig'.tsserver.setup{
 
 `filetypes` is extended here to include Vue SFC.
 ]],
-  },
+    },
 }
