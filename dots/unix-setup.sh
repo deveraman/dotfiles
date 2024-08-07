@@ -35,11 +35,13 @@ declare scripts=(
 )
 
 # configs
-ALACRITTY_CONF=""
+ALACRITTY_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/alacritty/alacritty.toml"
+ALACRITTY_THEME_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/alacritty/themes/oxocarbon.toml"
 ZSHRC="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zshrc"
 ZSH_PLUGINS="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zsh_plugins.txt"
 declare configs=(
-"curl -fsSL $ALACRITTY_CONF > ~/.config/"
+"curl -fsSL $ALACRITTY_CONF > ~/.config/alacritty/"
+"curl -fsSL $ALACRITTY_THEME_CONF > ~/.config/alacritty/themes/"
 "curl -fsSL $ZSHRC > ~/.zshrc"
 "curl -fsSL $ZSH_PLUGINS > ~/.zsh_plugins.txt"
 )
