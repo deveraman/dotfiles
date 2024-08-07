@@ -7,8 +7,15 @@ return {
     },
     {
         'rebelot/kanagawa.nvim',
+        -- config = function()
+        --     require("kanagawa").load("dragon")
+        -- end
+    },
+    {
+        'nyoom-engineering/oxocarbon.nvim',
         config = function()
-            require("kanagawa").load("dragon")
+            vim.opt.background = 'dark'
+            vim.cmd.colorscheme('oxocarbon')
         end
     },
 }

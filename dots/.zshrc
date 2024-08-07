@@ -1,9 +1,7 @@
-# Set kitty theme
-kitty +kitten themes kanagawa_dragon
-
 # Flutter
 export PATH=$PATH:$HOME/.fvm_flutter/bin
 export PATH=$PATH:$HOME/fvm/default/bin
+export PATH=$PATH:$HOME/.pub-cache/bin
 
 # POETRY
 export PATH=$PATH:$HOME/.local/bin
@@ -37,3 +35,18 @@ function load_nvm() {
 async_start_worker nvm_worker -n
 async_register_callback nvm_worker load_nvm
 async_job nvm_worker sleep 0.1
+
+alias ls="ls --color"
+alias tree="tree -C"
+
+export GOPATH="$HOME/go"; export GOROOT="$HOME/.go"; export PATH="$GOPATH/bin:$PATH"; # g-install: do NOT edit, see https://github.com/stefanmaric/g
+
+# pnpm
+export PNPM_HOME="/Users/maranix/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"

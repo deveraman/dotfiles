@@ -14,7 +14,7 @@
 OS="$(uname -s)"
 
 # packages
-PKG_COMMON=(tmux gh ripgrep neovim kitty)
+PKG_COMMON=(tmux gh ripgrep neovim alacritty)
 PKG_LINUX=(zsh)
 
 # an array of excutable scripts
@@ -35,11 +35,11 @@ declare scripts=(
 )
 
 # configs
-KITTY_CONF="https://raw.githubusercontent.com/maranix/kosei/main/dots/.config/kitty/kitty.conf"
+ALACRITTY_CONF=""
 ZSHRC="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zshrc"
 ZSH_PLUGINS="https://raw.githubusercontent.com/maranix/kosei/main/dots/.zsh_plugins.txt"
 declare configs=(
-"curl -fsSL $KITTY_CONF > ~/.config/kitty/kitty.conf"
+"curl -fsSL $ALACRITTY_CONF > ~/.config/"
 "curl -fsSL $ZSHRC > ~/.zshrc"
 "curl -fsSL $ZSH_PLUGINS > ~/.zsh_plugins.txt"
 )

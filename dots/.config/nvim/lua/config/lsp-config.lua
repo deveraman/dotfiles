@@ -1,5 +1,6 @@
 local lsp_zero = require('lsp-zero')
 local util = require('util')
+local luasnip = require('luasnip')
 
 local ensure_installed = {
     'biome',
@@ -37,3 +38,5 @@ require('mason-lspconfig').setup({
 for _, lsp in ipairs(lsp_list) do
     util.set_server_config(lsp)
 end
+
+luasnip.filetype_extend("dart", { "flutter" })

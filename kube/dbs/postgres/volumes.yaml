@@ -27,18 +27,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: timescale-data
-  namespace: databases
-  labels:
-    app: timescale
-spec:
-  storageClassName: longhorn
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi

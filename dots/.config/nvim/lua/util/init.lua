@@ -1,3 +1,5 @@
+require('util.flutter')
+
 local function set_server_config(name)
     local config_path = 'config.server.' .. name
 

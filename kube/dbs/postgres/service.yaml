@@ -5,31 +5,13 @@ metadata:
   namespace: databases
   annotations:
     metallb.universe.tf/allow-shared-ip: pg-dbs
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.207
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.208
 spec:
   selector:
     app: pg-dbs
   ports:
-  - port: 8080
+  - port: 5432
     targetPort: 5432
-    name: db-tcp
-    protocol: TCP
-  type: LoadBalancer
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: timescale-service
-  namespace: databases
-  annotations:
-    metallb.universe.tf/allow-shared-ip: pg-dbs
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.207
-spec:
-  selector:
-    app: pg-dbs
-  ports:                      
-  - port: 8081
-    targetPort: 5433
     name: db-tcp
     protocol: TCP
   type: LoadBalancer
