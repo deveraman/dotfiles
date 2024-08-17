@@ -1,0 +1,47 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-server-service
+  namespace: databases
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.209
+spec:
+  selector:
+    app: redis-stack
+  ports:
+  - port: 6379
+    targetPort: server
+    protocol: TCP
+  type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-insight-service
+  namespace: databases
+spec:
+  selector:
+    app: redis-stack
+  ports:                      
+  - port: 8001
+    targetPort: insight
+    protocol: TCP
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: redis-insight-ingress
+  namespace: databases
+spec:
+  rules:
+  - host: redis.homelab.maranix.in
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: redis-insight-service
+            port:
+              number: 8001

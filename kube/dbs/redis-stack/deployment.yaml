@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  redis-stack
+  namespace: databases
+  labels:
+    app:  redis-stack
+spec:
+  selector:
+    matchLabels:
+      app: redis-stack
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  redis-stack
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ashin
+      containers:
+      - name: redis-stack
+        image:  redis/redis-stack
+        imagePullPolicy: Always
+        env:
+          - name: REDIS_ARGS
+            value: "--requirepass redisstack"
+        ports:
+        - containerPort: 8001
+          name: insight
+          protocol: TCP
+        - containerPort: 6379
+          name: server
+          protocol: TCP
+        volumeMounts:
+        - name: data
+          mountPath: /data
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis-data
+      restartPolicy: Always
+---
