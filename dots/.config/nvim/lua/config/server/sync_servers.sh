@@ -19,6 +19,8 @@ declare SERVERS=(
 	tsserver
 	volar
 	zls
+    cssls
+    html
 )
 
 echo "Downloading...."

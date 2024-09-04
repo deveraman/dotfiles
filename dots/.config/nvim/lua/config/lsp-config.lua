@@ -4,27 +4,31 @@ local luasnip = require('luasnip')
 
 local ensure_installed = {
     'biome',
+    'cssls',
     'gopls',
+    'html',
     'lua_ls',
     'pyright',
     'ruff_lsp',
-    'zls',
     'tailwindcss',
     'tsserver',
     'volar',
+    'zls',
 }
 
 local lsp_list = {
     'biome',
+    'cssls',
     'dartls',
     'gopls',
+    'html',
     'lua_ls',
     'pyright',
     'ruff_lsp',
-    'zls',
     'tailwindcss',
     'tsserver',
     'volar',
+    'zls',
 }
 
 require('mason').setup()
