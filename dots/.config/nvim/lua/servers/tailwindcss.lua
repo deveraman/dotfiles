@@ -25,8 +25,7 @@ return {
       'handlebars',
       'hbs',
       'html',
-      -- 'HTML (Eex)',
-      -- 'HTML (EEx)',
+      'htmlangular',
       'html-eex',
       'heex',
       'jade',
@@ -61,13 +60,6 @@ return {
       'svelte',
       'templ',
     },
-    init_options = {
-      userLanguages = {
-        eelixir = 'html-eex',
-        eruby = 'erb',
-        templ = 'html',
-      },
-    },
     settings = {
       tailwindCSS = {
         validate = true,
@@ -86,6 +78,12 @@ return {
           'class:list',
           'classList',
           'ngClass',
+        },
+        includeLanguages = {
+          eelixir = 'html-eex',
+          eruby = 'erb',
+          templ = 'html',
+          htmlangular = 'html',
         },
       },
     },
@@ -125,8 +123,5 @@ Tailwind CSS Language Server can be installed via npm:
 npm install -g @tailwindcss/language-server
 ```
 ]],
-    default_config = {
-      root_dir = [[root_pattern('tailwind.config.js', 'tailwind.config.cjs', 'tailwind.config.mjs', 'tailwind.config.ts', 'postcss.config.js', 'postcss.config.cjs', 'postcss.config.mjs', 'postcss.config.ts', 'package.json', 'node_modules', '.git')]],
-    },
   },
 }

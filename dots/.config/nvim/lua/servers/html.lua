@@ -1,12 +1,7 @@
 local util = require 'lspconfig.util'
 
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
 return {
     default_config = {
-        capabilities = capabilities,
         cmd = { 'vscode-html-language-server', '--stdio' },
         filetypes = { 'html', 'templ' },
         root_dir = util.root_pattern('package.json', '.git'),

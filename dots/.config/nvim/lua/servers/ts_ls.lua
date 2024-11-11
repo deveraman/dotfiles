@@ -1,16 +1,16 @@
-local util = require 'lspconfig.util'
-local vue_plugin = os.getenv("PNPM_HOME") .. "/global/5/node_modules/@vue/typescript-plugin"
+local util = require('lspconfig.util')
+local mason_registry = require('mason-registry')
+local vue_lsp_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
+'/node_modules/@vue/language-server'
 
 return {
     default_config = {
         init_options = {
             hostInfo = 'neovim',
             plugins = {
-                {
-                    name = "@vue/typescript-plugin",
-                    location = vue_plugin,
-                    languages = { "javascript", "typescript", "vue" },
-                },
+                name = "@vue/typescript-plugin",
+                location = vue_lsp_path,
+                languages = { "vue" },
             },
         },
         cmd = { 'typescript-language-server', '--stdio' },
@@ -29,6 +29,8 @@ return {
     docs = {
         description = [[
 https://github.com/typescript-language-server/typescript-language-server
+
+`ts_ls`, aka `typescript-language-server`, is a Language Server Protocol implementation for TypeScript wrapping `tsserver`. Note that `ts_ls` is not `tsserver`.
 
 `typescript-language-server` depends on `typescript`. Both packages can be installed via `npm`:
 ```sh
@@ -63,7 +65,7 @@ adds Vue support to this language server.
 *IMPORTANT*: It is crucial to ensure that `@vue/typescript-plugin` and `volar `are of identical versions.
 
 ```lua
-require'lspconfig'.tsserver.setup{
+require'lspconfig'.ts_ls.setup{
   init_options = {
     plugins = {
       {
