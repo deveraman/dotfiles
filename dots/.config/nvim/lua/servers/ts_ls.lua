@@ -1,16 +1,18 @@
 local util = require('lspconfig.util')
 local mason_registry = require('mason-registry')
 local vue_lsp_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
-'/node_modules/@vue/language-server'
+    '/node_modules/@vue/language-server'
 
 return {
     default_config = {
         init_options = {
             hostInfo = 'neovim',
             plugins = {
-                name = "@vue/typescript-plugin",
-                location = vue_lsp_path,
-                languages = { "vue" },
+                {
+                    name = "@vue/typescript-plugin",
+                    location = vue_lsp_path,
+                    languages = { "vue" },
+                },
             },
         },
         cmd = { 'typescript-language-server', '--stdio' },

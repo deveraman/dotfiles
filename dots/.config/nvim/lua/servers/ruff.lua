@@ -1,15 +1,15 @@
 local util = require 'lspconfig.util'
 
 return {
-  default_config = {
-    cmd = { 'ruff', 'server' },
-    filetypes = { 'python' },
-    root_dir = util.root_pattern('pyproject.toml', 'ruff.toml', '.ruff.toml') or util.find_git_ancestor(),
-    single_file_support = true,
-    settings = {},
-  },
-  docs = {
-    description = [[
+    default_config = {
+        cmd = { 'ruff', 'server' },
+        filetypes = { 'python' },
+        root_dir = util.root_pattern('pyproject.toml', 'ruff.toml', '.ruff.toml') or util.find_git_ancestor(),
+        single_file_support = true,
+        settings = {},
+    },
+    docs = {
+        description = [[
 https://github.com/astral-sh/ruff
 
 A Language Server Protocol implementation for Ruff, an extremely fast Python linter and code formatter, written in Rust. It can be installed via `pip`.
@@ -37,5 +37,5 @@ require('lspconfig').ruff.setup({
 Refer to the [documentation](https://docs.astral.sh/ruff/editors/) for more details.
 
   ]],
-  },
+    },
 }
